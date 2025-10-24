@@ -1,7 +1,11 @@
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -16,27 +20,63 @@ import javax.swing.Timer;
 public class Frame extends JPanel implements ActionListener, MouseListener, KeyListener {
 	
 	//frame size
-	private int screenWidth = 900, screenHeight = 600;
+	private int screenWidth = 910, screenHeight = 540; //CHANGE TIS TO MATCH BACKGROUND
 	private String title = "Duck Hunt";
-	
+	private int count = 3;
 	
 	/**
 	 * Declare and instantiate (create) your objects here
 	 */
 	private Duck duckObject = new Duck();
+	private Duck2 greenBook = new Duck2();
+	private Background myBackground = new Background();
+	private Character myCharacter = new Character();
+	private BackgroundLayer myLayer = new BackgroundLayer();
+	private Character2 characterB = new Character2();
+	private MyCursor cursor = new MyCursor();
+	private Ammo ammoObject = new Ammo();
+	private Ammo1 ammoObject1 = new Ammo1();
+	private Ammo2 ammoObject2 = new Ammo2(); 
+	private Ammo3 ammoObject3 = new Ammo3();
 	
 	public void paint(Graphics pen) {
 		
 		//this line of code is to force redraw the entire frame
 		super.paintComponent(pen);
 		
+		//background should be drawn before objects
+		//or based on how you want to LAYER
+		myBackground.paint(pen);
+		
+		
+		
 		//call paint for the object
 		//for objects, you call methods on them using the dot operator
 		//methods use always involve parenthesis
 		duckObject.paint(pen);
+		greenBook.paint(pen);
 		
+		myLayer.paint(pen);
 		
-		
+		if(count == 0) {
+			ammoObject.paint(pen);
+		}
+		if(count == 1) {
+			ammoObject1.paint(pen);
+		}
+		if(count == 2) {
+			ammoObject2.paint(pen);
+		}
+		if(count == 3) {
+			ammoObject3.paint(pen);
+		}
+		if(count == -1){
+			ammoObject3.paint(pen);
+			count = 3;
+		}
+		myCharacter.paint(pen);
+		characterB.paint(pen);
+		cursor.paint(pen);
 	}
 	
 	
@@ -62,6 +102,13 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	public void mousePressed(MouseEvent mouse) {
 	    // Runs when a mouse button is pressed down.
 	    // Example: You could start dragging an object here.
+		System.out.println(mouse.getX()+":"+mouse.getY());
+		
+		duckObject.checkCollision(mouse.getX(), mouse.getY());
+		greenBook.checkCollision(mouse.getX(), mouse.getY());
+		
+		count -= 1;
+		System.out.println(count);
 	}
 
 	@Override
@@ -131,6 +178,13 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		t.start();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
+		
+		//cursor icon code
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image image = toolkit.getImage("cursor.png");
+		Cursor a = toolkit.createCustomCursor(image, new Point(this.getX(), this.getY()), "");
+		this.setCursor (a);
+		
 	}
 
 }
