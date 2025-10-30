@@ -44,7 +44,7 @@ public class Ammo1 {
         scaleX = 0.1;
         scaleY = 0.1;
         x = 2;
-        y = 370;
+        y = -30;
         
         init(x, y); // Set up the starting location and size
     }

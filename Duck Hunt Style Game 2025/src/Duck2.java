@@ -30,6 +30,8 @@ public class Duck2 {
     
     //debugging variable
     public boolean debugging = true;
+    
+    private Dog dog2 = new Dog("bhavanWitchReal.gif");
 
     // Constructor: runs when you make a new Duck object
     public Duck2() {
@@ -141,6 +143,7 @@ public class Duck2 {
         update();
         init(x,y);
         
+		dog2.paint(g);
         //create a green hitbox
         //if(debugging) {
         //g.setColor(Color.green);
@@ -195,6 +198,9 @@ public class Duck2 {
     		vy = 13;
     		img = stunned;
     		
+    		this.dog2.x = (int) x+200;
+    		this.dog2.y = 430;
+    		this.dog2.vy = -3;
     		
     		return true;
     	}else {

@@ -15,6 +15,8 @@ public class Duck {
     private Image normal; //normal look
     private Image stunned;
     
+    private Dog dog = new Dog("zoeWitchReal.gif");
+    
     private AffineTransform tx;      // Used to move (translate) and resize (scale) the image
 
     // Variables to control the size (scale) of the duck image
@@ -32,7 +34,6 @@ public class Duck {
     //debugging variable
     public boolean debugging = true;
     
-    private Character myCharacter = new Character();
 
     // Constructor: runs when you make a new Duck object
     public Duck() {
@@ -145,6 +146,8 @@ public class Duck {
         update();
         init(x,y);
         
+		dog.paint(g);
+        
         //create a green hitbox
         //if(debugging) {
         //g.setColor(Color.green);
@@ -199,6 +202,10 @@ public class Duck {
     		vx = 0;
     		vy = 13;
     		img = stunned;
+    		
+    		this.dog.x = (int) x;
+    		this.dog.y = 430;
+    		this.dog.vy = -3;
     		
 		
     		return true;

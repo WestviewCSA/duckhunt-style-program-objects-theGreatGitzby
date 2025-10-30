@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -23,6 +24,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	private int screenWidth = 910, screenHeight = 540; //CHANGE TIS TO MATCH BACKGROUND
 	private String title = "Duck Hunt";
 	private int count = 3;
+	private int totalScore = 0;
+	//private int time = 30;
+	int waveNum = 1;
 	
 	/**
 	 * Declare and instantiate (create) your objects here
@@ -30,14 +34,19 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	private Duck duckObject = new Duck();
 	private Duck2 greenBook = new Duck2();
 	private Background myBackground = new Background();
-	private Character myCharacter = new Character();
 	private BackgroundLayer myLayer = new BackgroundLayer();
-	private Character2 characterB = new Character2();
 	private MyCursor cursor = new MyCursor();
 	private Ammo ammoObject = new Ammo();
 	private Ammo1 ammoObject1 = new Ammo1();
 	private Ammo2 ammoObject2 = new Ammo2(); 
 	private Ammo3 ammoObject3 = new Ammo3();
+
+	
+	Music mouseClickSound = new Music("sparkleSound2.wav", false);
+	Music backMusic = new Music("harryPotterMusic.wav", true);
+	Music book = new Music("bookSound.wav", false);
+
+	
 	
 	public void paint(Graphics pen) {
 		
@@ -48,7 +57,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		//or based on how you want to LAYER
 		myBackground.paint(pen);
 		
-		
+		this.backMusic.play();
 		
 		//call paint for the object
 		//for objects, you call methods on them using the dot operator
@@ -57,6 +66,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		greenBook.paint(pen);
 		
 		myLayer.paint(pen);
+
 		
 		if(count == 0) {
 			ammoObject.paint(pen);
@@ -74,9 +84,26 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			ammoObject3.paint(pen);
 			count = 3;
 		}
-		myCharacter.paint(pen);
-		characterB.paint(pen);
+		
+		Font f = new Font("Segoe UI", Font.PLAIN, 50);
+		pen.setFont(f);
+		pen.setColor(Color.white);
+		pen.drawString("Score: " + totalScore, 300, 50);
+		//pen.drawString("" + time, 500, 50);
+		
+		Font font2 = new Font("Segoe UI", Font.PLAIN, 50);
+		pen.setFont(font2);
+		pen.drawString("Wave " + waveNum, 500, 50);
+
 		cursor.paint(pen);
+		
+		if(totalScore == 5) {
+			totalScore = 0;
+			count = 3;
+			waveNum++;
+			this.book.play();
+		}
+
 	}
 	
 	
@@ -108,7 +135,14 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		greenBook.checkCollision(mouse.getX(), mouse.getY());
 		
 		count -= 1;
-		System.out.println(count);
+		
+		if(this.duckObject.checkCollision(mouse.getX(), mouse.getY()) && count != -1){
+			totalScore++;
+		}
+		if(this.greenBook.checkCollision(mouse.getX(), mouse.getY()) && count != -1){
+			totalScore++;
+		}
+		this.mouseClickSound.play();
 	}
 
 	@Override
